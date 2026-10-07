@@ -13,8 +13,10 @@ body {
     color: #e0e0e0;
     display: flex;
     justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    align-items: flex-start;
+    padding-top: 8vh;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .container {
@@ -23,14 +25,16 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     width: 100%;
-    max-width: 600px;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
 }
 
 h1 {
     margin-bottom: 0.5rem;
     font-size: 1.5rem;
 }
-
 p {
     color: #a0a0a0;
     margin-bottom: 1.5rem;
@@ -38,8 +42,7 @@ p {
 
 .input-group {
     display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
+    width: 100%;
 }
 
 input {
@@ -51,42 +54,34 @@ input {
     color: #fff;
     font-size: 1rem;
 }
-
 input:focus {
     outline: none;
     border-color: #4caf50;
 }
-
-button {
-    padding: 0.75rem 1.5rem;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: bold;
-    transition: background-color 0.2s;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-button:disabled {
-    background-color: #555;
+input:disabled {
+    opacity: 0.5;
     cursor: not-allowed;
-    color: #888;
 }
 
 .status-hidden {
-    display: none;
+    display: none !important;
 }
 
-#statusText {
+#statusArea {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    margin-top: 1.5rem;
+    border-top: 1px solid #333;
+    padding-top: 1.5rem;
+}
+
+#repoTitle {
+    font-size: 1.2rem;
+    color: #ffffff;
     margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-    color: #4caf50;
+    flex-shrink: 0;
 }
 
 .progress-bar-container {
@@ -95,11 +90,97 @@ button:disabled {
     background-color: #333;
     border-radius: 4px;
     overflow: hidden;
+    flex-shrink: 0;
+    margin-bottom: 0.5rem;
+}
+
+#fileCountText {
+    font-size: 1rem;
+    color: #4caf50;
+    font-weight: bold;
+    margin-bottom: 0.2rem;
+    flex-shrink: 0;
+}
+
+#currentFileText {
+    font-size: 0.95rem;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
 }
 
 .progress-bar {
     height: 100%;
     width: 0%;
     background-color: #4caf50;
-    transition: width 0.2s;
+    transition: width 0.1s;
+}
+
+.log-container {
+    margin-top: 1rem;
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 0.4rem;
+    right: 1.2rem;
+    background-color: #2d2d2d;
+    color: #ccc;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.copy-btn:hover {
+    background-color: #4caf50;
+    color: #fff;
+    border-color: #4caf50;
+}
+
+.log-box {
+    background-color: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 0.5rem;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+}
+
+.log-box ul {
+    list-style: none;
+}
+.log-box li {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 3px;
+    font-family: "Courier New", Courier, monospace;
+    word-break: break-all;
+}
+
+.log-box::-webkit-scrollbar {
+    width: 8px;
+}
+.log-box::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+.log-box::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+.log-box::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

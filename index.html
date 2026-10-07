@@ -5,13 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Git Directory Downloader</title>
         <link rel="stylesheet" href="styles.css" />
-        <!-- JSZip via CDN -->
         <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     </head>
     <body>
         <main class="container">
             <h1>Git Directory Downloader</h1>
-            <p>Paste a GitHub folder link to download it as a ZIP file.</p>
+            <p>
+                Paste a GitHub folder link and hit enter to download it as a ZIP
+                file.
+            </p>
 
             <div class="input-group">
                 <input
@@ -20,7 +22,6 @@
                     placeholder="https://github.com/owner/repo/tree/main/folder"
                     autocomplete="off"
                 />
-                <button id="downloadBtn">Download</button>
             </div>
             <div class="input-group" style="margin-top: 10px">
                 <input
@@ -32,9 +33,20 @@
             </div>
 
             <div id="statusArea" class="status-hidden">
-                <p id="statusText">Initializing...</p>
+                <h2 id="repoTitle">Repo: owner/repo</h2>
+
                 <div class="progress-bar-container">
                     <div id="progressBar" class="progress-bar"></div>
+                </div>
+
+                <h3 id="fileCountText">Retrieving directory info...</h3>
+                <p id="currentFileText" class="active-file">&nbsp;</p>
+
+                <div id="logContainer" class="log-container status-hidden">
+                    <button id="copyLogBtn" class="copy-btn">Copy</button>
+                    <div class="log-box">
+                        <ul id="logList"></ul>
+                    </div>
                 </div>
             </div>
         </main>
