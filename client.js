@@ -10,12 +10,22 @@ async function startDownload() {
         const repoInfo = parseGithubUrl(urlInput);
         if (!repoInfo) throw new Error("Invalid GitHub URL format.");
 
+        const token = document.getElementById("tokenInput").value.trim();
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
         ui.updateStatus("Fetching repository structure...");
         const treeUrl = `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/git/trees/${repoInfo.branch}?recursive=1`;
 
-        const treeResponse = await fetch(treeUrl);
-        if (!treeResponse.ok)
+        const treeResponse = await fetch(treeUrl, { headers });
+
+        if (!treeResponse.ok) {
+            if (treeResponse.status === 403 || treeResponse.status === 429) {
+                throw new Error(
+                    "GitHub API rate limit exceeded. Add a Personal Access Token to continue.",
+                );
+            }
             throw new Error(`GitHub API Error: ${treeResponse.statusText}`);
+        }
 
         const treeData = await treeResponse.json();
 
