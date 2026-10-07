@@ -49,18 +49,35 @@ async function startDownload() {
 
         // Chunking function to prevent browser freezing and network saturation
         const chunkSize = 5;
+        let hasError = false; // Flag to prevent UI race conditions
+
         for (let i = 0; i < filesToDownload.length; i += chunkSize) {
+            if (hasError) break; // Stop looping if an error occurred
             const chunk = filesToDownload.slice(i, i + chunkSize);
 
             await Promise.all(
                 chunk.map(async (file) => {
-                    const rawUrl = `https://raw.githubusercontent.com/${repoInfo.owner}/${repoInfo.repo}/${repoInfo.branch}/${file.path}`;
+                    if (hasError) return;
+
+                    // Properly encode the path to handle spaces and special characters
+                    const encodedPath = file.path
+                        .split("/")
+                        .map(encodeURIComponent)
+                        .join("/");
+                    const rawUrl = `https://raw.githubusercontent.com/${repoInfo.owner}/${repoInfo.repo}/${repoInfo.branch}/${encodedPath}`;
+
                     const fileRes = await fetch(rawUrl);
-                    if (!fileRes.ok)
-                        throw new Error(`Failed to fetch ${file.path}`);
+                    if (!fileRes.ok) {
+                        hasError = true;
+                        throw new Error(
+                            `Failed to fetch ${file.path} (HTTP ${fileRes.status})`,
+                        );
+                    }
 
                     // Fetch as arrayBuffer to preserve binary data (images, fonts, etc.)
                     const blob = await fileRes.arrayBuffer();
+
+                    if (hasError) return; // Don't update UI if another file in the chunk failed
 
                     // Strip the base directory path so the zip structure is clean
                     const zipPath = file.path
