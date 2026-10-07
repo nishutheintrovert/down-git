@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Git Directory Downloader</title>
+        <link rel="stylesheet" href="styles.css" />
+        <!-- JSZip via CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    </head>
+    <body>
+        <main class="container">
+            <h1>Git Directory Downloader</h1>
+            <p>Paste a GitHub folder link to download it as a ZIP file.</p>
+
+            <div class="input-group">
+                <input
+                    type="text"
+                    id="urlInput"
+                    placeholder="https://github.com/owner/repo/tree/main/folder"
+                    autocomplete="off"
+                />
+                <button id="downloadBtn">Download</button>
+            </div>
+
+            <div id="statusArea" class="status-hidden">
+                <p id="statusText">Initializing...</p>
+                <div class="progress-bar-container">
+                    <div id="progressBar" class="progress-bar"></div>
+                </div>
+            </div>
+        </main>
+        <script src="client.js"></script>
+    </body>
+</html>

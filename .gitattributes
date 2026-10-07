@@ -1,0 +1,12 @@
+# THIS FILE IS AUTO-GENERATED
+# AND MUST BE CHECKED FOR RELIABILITY
+
+# Core Git files
+.gitattributes text eol=lf
+.gitignore text eol=lf
+
+# Detected text files
+*.css text
+*.html text
+*.js text
+*.md text
