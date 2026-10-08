@@ -3,25 +3,43 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Git Directory Downloader</title>
+        <title>GitHub Directory Downloader</title>
+        <link rel="icon" type="image/png" href="favicon.png" />
         <link rel="stylesheet" href="styles.css" />
         <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     </head>
     <body>
         <main class="container">
-            <h1>Git Directory Downloader</h1>
+            <div class="title-container">
+                <svg class="github-logo" height="32" viewBox="0 0 16 16" width="32" aria-hidden="true">
+                    <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+                </svg>
+                <h1>GitHub Directory Downloader</h1>
+            </div>
             <p>
                 Paste a GitHub folder link and hit enter to download it as a ZIP
                 file.
             </p>
 
-            <div class="input-group">
+            <div class="input-group url-input-container">
                 <input
                     type="text"
                     id="urlInput"
                     placeholder="https://github.com/owner/repo/tree/main/folder"
                     autocomplete="off"
                 />
+                <div class="inline-actions">
+                    <button id="downloadBtn" class="inline-action-btn" data-tooltip="Download ZIP">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 96 960 960" width="20" fill="currentColor">
+                            <path d="M480 896q-83 0-156-31.5T197 779q-54-54-85.5-127T80 496q0-83 31.5-156T197 213q54-54 127-85.5T480 96q83 0 156 31.5T763 213q54 54 85.5 127T880 496q0 83-31.5 156T763 779q-54 54-127 85.5T480 896Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm-42-316V296h84v204l76-76 60 60-178 178-178-178 60-60 76 76Zm42 16Z"/>
+                        </svg>
+                    </button>
+                    <button id="copyLinkBtn" class="inline-action-btn" data-tooltip="Copy download link">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 96 960 960" width="20" fill="currentColor">
+                            <path d="M360 896q-33 0-56.5-23.5T280 816V336q0-33 23.5-56.5T360 256h400q33 0 56.5 23.5T840 336v480q0 33-23.5 56.5T760 896H360Zm0-80h400V336H360v480ZM200 736q-33 0-56.5-23.5T120 656V176q0-33 23.5-56.5T200 96h400q33 0 56.5 23.5T680 176v40H600v-40H200v480h40v80h-40Zm160 80V336v480Z"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <div class="input-group" style="margin-top: 10px">
                 <input
@@ -43,7 +61,11 @@
                 <p id="currentFileText" class="active-file">&nbsp;</p>
 
                 <div id="logContainer" class="log-container status-hidden">
-                    <button id="copyLogBtn" class="copy-btn">Copy</button>
+                    <button id="copyLogBtn" class="copy-btn" data-tooltip="Copy logs">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 96 960 960" width="20" fill="currentColor">
+                            <path d="M360 896q-33 0-56.5-23.5T280 816V336q0-33 23.5-56.5T360 256h400q33 0 56.5 23.5T840 336v480q0 33-23.5 56.5T760 896H360Zm0-80h400V336H360v480ZM200 736q-33 0-56.5-23.5T120 656V176q0-33 23.5-56.5T200 96h400q33 0 56.5 23.5T680 176v40H600v-40H200v480h40v80h-40Zm160 80V336v480Z"/>
+                        </svg>
+                    </button>
                     <div class="log-box">
                         <ul id="logList"></ul>
                     </div>

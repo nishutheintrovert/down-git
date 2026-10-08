@@ -1,3 +1,14 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const urlParam = params.get("url");
+    if (urlParam) {
+        document.getElementById("urlInput").value = urlParam;
+        startDownload();
+    }
+});
+
+document.getElementById("downloadBtn").addEventListener("click", startDownload);
+
 document.getElementById("urlInput").addEventListener("keydown", (e) => {
     if (e.key === "Enter") startDownload();
 });
@@ -5,20 +16,56 @@ document.getElementById("tokenInput").addEventListener("keydown", (e) => {
     if (e.key === "Enter") startDownload();
 });
 
+document.getElementById("copyLinkBtn").addEventListener("click", async (e) => {
+    const btn = e.currentTarget;
+    const urlInput = document.getElementById("urlInput").value.trim();
+    if (!urlInput) return alert("Please enter a valid GitHub URL");
+
+    const repoInfo = parseGithubUrl(urlInput);
+    if (!repoInfo) return alert("Invalid GitHub URL format.");
+
+    const shareableLink = `${window.location.origin}${window.location.pathname}?url=${encodeURIComponent(urlInput)}`;
+
+    try {
+        await navigator.clipboard.writeText(shareableLink);
+        btn.classList.add("btn-success");
+        setTimeout(() => {
+            btn.classList.remove("btn-success");
+        }, 2000);
+
+        const statusArea = document.getElementById("statusArea");
+        const repoTitle = document.getElementById("repoTitle");
+        const fileCountText = document.getElementById("fileCountText");
+
+        statusArea.classList.remove("status-hidden");
+        document
+            .querySelector(".progress-bar-container")
+            .classList.add("status-hidden");
+        document.getElementById("logContainer").classList.add("status-hidden");
+
+        const cleanPath = repoInfo.path.replace(/\/$/, "");
+        const folderName = cleanPath.split("/").pop();
+        const dirText = folderName ? ` (${folderName})` : "";
+        repoTitle.innerText = `Repo: ${repoInfo.owner}/${repoInfo.repo}${dirText}`;
+
+        fileCountText.innerText = "Download link copied to clipboard!";
+        document.getElementById("currentFileText").innerText = "\u00A0";
+    } catch (err) {
+        console.error("Failed to copy link: ", err);
+    }
+});
+
 document.getElementById("copyLogBtn").addEventListener("click", async (e) => {
+    const btn = e.currentTarget;
     const logItems = Array.from(document.getElementById("logList").children);
     if (logItems.length === 0) return;
 
     const textToCopy = logItems.map((li) => li.innerText).join("\n");
     try {
         await navigator.clipboard.writeText(textToCopy);
-        e.target.innerText = "Copied!";
-        e.target.style.backgroundColor = "#4CAF50";
-        e.target.style.color = "#fff";
+        btn.classList.add("btn-success");
         setTimeout(() => {
-            e.target.innerText = "Copy";
-            e.target.style.backgroundColor = "";
-            e.target.style.color = "";
+            btn.classList.remove("btn-success");
         }, 2000);
     } catch (err) {
         console.error("Failed to copy: ", err);
@@ -52,9 +99,11 @@ async function startDownload() {
 
         const treeData = await treeResponse.json();
 
+        const searchPath = repoInfo.path.toLowerCase();
         const filesToDownload = treeData.tree.filter(
             (item) =>
-                item.type === "blob" && item.path.startsWith(repoInfo.path),
+                item.type === "blob" &&
+                item.path.toLowerCase().startsWith(searchPath),
         );
 
         if (filesToDownload.length === 0)
@@ -119,10 +168,13 @@ async function startDownload() {
 
         ui.updateCurrentFile("Zipping done!");
 
-        triggerDownload(
-            zipBlob,
-            `${repoInfo.repo}-${repoInfo.path.split("/").pop() || "download"}.zip`,
-        );
+        const cleanPath = repoInfo.path.replace(/\/$/, "");
+        const folderName = cleanPath.split("/").pop();
+        const zipFilename = folderName
+            ? `${folderName}.zip`
+            : `${repoInfo.repo}.zip`;
+
+        triggerDownload(zipBlob, zipFilename);
     } catch (error) {
         ui.updateCurrentFile(`Error: ${error.message}`);
         console.error(error);
@@ -172,10 +224,17 @@ function setupUI(repoInfo) {
     tokenInput.disabled = true;
     statusArea.classList.remove("status-hidden");
     document.getElementById("logContainer").classList.add("status-hidden");
+    document
+        .querySelector(".progress-bar-container")
+        .classList.remove("status-hidden");
     progressBar.style.width = "0%";
     logList.innerHTML = "";
 
-    repoTitle.innerText = `Repo: ${repoInfo.owner}/${repoInfo.repo}`;
+    const cleanPath = repoInfo.path.replace(/\/$/, "");
+    const folderName = cleanPath.split("/").pop();
+    const dirText = folderName ? ` (${folderName})` : "";
+    repoTitle.innerText = `Repo: ${repoInfo.owner}/${repoInfo.repo}${dirText}`;
+
     fileCountText.innerText = "Retrieving directory info...";
     currentFileText.innerText = "\u00A0";
 

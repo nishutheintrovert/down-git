@@ -14,27 +14,37 @@ body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding-top: 8vh;
-    height: 100vh;
-    overflow: hidden;
+    padding: 8vh 5vw;
+    min-height: 100vh;
+    font-size: clamp(16px, 1vw + 8px, 22px);
 }
 
 .container {
     background-color: #1e1e1e;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
     width: 100%;
-    max-width: 700px;
+    max-width: 1200px;
     display: flex;
     flex-direction: column;
-    max-height: 85vh;
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 0.5rem;
+}
+
+.github-logo {
+    color: #e0e0e0;
 }
 
 h1 {
-    margin-bottom: 0.5rem;
     font-size: 1.5rem;
 }
+
 p {
     color: #a0a0a0;
     margin-bottom: 1.5rem;
@@ -63,6 +73,43 @@ input:disabled {
     cursor: not-allowed;
 }
 
+.url-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.url-input-container input {
+    padding-right: 76px;
+}
+
+.inline-actions {
+    position: absolute;
+    right: 8px;
+    display: flex;
+    gap: 4px;
+}
+
+.inline-action-btn {
+    background: transparent;
+    border: none;
+    color: #a0a0a0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 4px;
+    transition:
+        color 0.2s,
+        background-color 0.2s;
+}
+
+.inline-action-btn:hover {
+    color: #fff;
+    background-color: #333;
+}
+
 .status-hidden {
     display: none !important;
 }
@@ -70,8 +117,6 @@ input:disabled {
 #statusArea {
     display: flex;
     flex-direction: column;
-    flex: 1;
-    min-height: 0;
     margin-top: 1.5rem;
     border-top: 1px solid #333;
     padding-top: 1.5rem;
@@ -122,8 +167,6 @@ input:disabled {
 .log-container {
     margin-top: 1rem;
     position: relative;
-    flex: 1;
-    min-height: 0;
     display: flex;
     flex-direction: column;
 }
@@ -133,31 +176,65 @@ input:disabled {
     top: 0.4rem;
     right: 1.2rem;
     background-color: #2d2d2d;
-    color: #ccc;
+    color: #a0a0a0;
     border: 1px solid #444;
     border-radius: 4px;
-    padding: 0.3rem 0.6rem;
-    font-size: 0.8rem;
+    padding: 4px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.2s;
     z-index: 10;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .copy-btn:hover {
-    background-color: #4caf50;
+    background-color: #333;
     color: #fff;
-    border-color: #4caf50;
+}
+
+.btn-success,
+.btn-success:hover {
+    background-color: #4caf50 !important;
+    color: #fff !important;
+    border-color: #4caf50 !important;
+}
+
+/* Custom Tooltip Styles */
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: calc(100% + 16px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #e3e3e3;
+    color: #1e1e1e;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.15s ease-in-out,
+        visibility 0.15s ease-in-out;
+    pointer-events: none;
+    z-index: 100;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-tooltip]:hover::after {
+    opacity: 1;
+    visibility: visible;
 }
 
 .log-box {
     background-color: #0a0a0a;
     border: 1px solid #333;
-    border-radius: 4px;
-    padding: 0.5rem;
-    overflow-y: auto;
-    flex: 1;
-    min-height: 0;
+    border-radius: 6px;
+    padding: 0.75rem;
 }
 
 .log-box ul {
@@ -171,16 +248,17 @@ input:disabled {
     word-break: break-all;
 }
 
-.log-box::-webkit-scrollbar {
-    width: 8px;
+body::-webkit-scrollbar {
+    width: 14px;
 }
-.log-box::-webkit-scrollbar-track {
-    background: #0a0a0a;
+body::-webkit-scrollbar-track {
+    background: #121212;
 }
-.log-box::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb {
     background: #444;
-    border-radius: 4px;
+    border-radius: 8px;
+    border: 3px solid #121212;
 }
-.log-box::-webkit-scrollbar-thumb:hover {
+body::-webkit-scrollbar-thumb:hover {
     background: #555;
 }

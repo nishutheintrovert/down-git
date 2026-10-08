@@ -10,3 +10,6 @@
 *.html text
 *.js text
 *.md text
+
+# Detected binary files
+*.png binary
